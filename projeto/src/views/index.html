@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Doce da Vovo</title>
+</head>
+
+<body>
+    <header>
+        <img src="assets/logo_pudim.png" id="logo">
+    </header>
+    <main>
+        <section class="prinForm">
+            <section class="primeira">
+                <img src="assets/logo_pudim.png" id="primeira_foto">
+            </section>
+            <form id="formulario">
+                <section class="titulo">
+                    <h2>Doces do Beiçola</h2>
+                </section>
+                <label for="nome">Nome</label>
+                <input type="text" class="campo" id="nome" placeholder="Digite seu nome" required>
+
+                <label for="email">Email</label>
+                <input type="text" class="campo" id="email" placeholder="pedido@gmail.com" required>
+
+                <label for="suges">Sugestão</label>
+                <textarea class="campo" id="suges" placeholder="Quero bolo de chocolate" required></textarea>
+                <section class="heroBtn">
+                    <button type="submit" id="enviarPedidos">Enviar</button>
+                </section>
+            </form>
+            <section class="primeira">
+                <img src="assets/logo_pudim.png" id="primeira_foto">
+            </section>
+        </section>
+        <h2 class="subPedido">Pedidos</h2>
+        <section class="pedidos">
+            <p id="situacaoPedidos"></p>
+            <ul id="listarPedidos"></ul>
+        </section>
+    </main>
+    <footer>
+
+    </footer>
+
+    <script src="./js/script.js"></script>
+</body>
+
+</html>
