@@ -7,8 +7,10 @@ const listarPedidos = document.getElementById('listarPedidos')
 const btnEnviar = document.getElementById('enviarPedidos')
 const url = 'http://localhost:3000/pedidos'
 
+let idEditando = null
 
 document.addEventListener('DOMContentLoaded', mostrarPedidos)
+
 
 formulario.addEventListener('submit', async(evento) => {
 
@@ -22,6 +24,12 @@ formulario.addEventListener('submit', async(evento) => {
         exibirMensagem('Preencha todos os campos', 'erro')
         return
     }
+
+    if (idEditando !== null){
+        atualizarPedido(idEditando)
+        return
+    }
+
 
     try {
         const resposta = await fetch(url, {
@@ -73,11 +81,20 @@ async function mostrarPedidos() {
             btnEditar.classList.add('editar')
             btnExcluir.classList.add('excluir')
 
-
-
             lista.innerHTML = `Nome: ${item.nome} - Email: ${item.email} - Sugestão: ${item.suges}`
 
+            btnEditar.addEventListener('click', () =>{
+                inputNome.value = item.nome
+                inputEmail.value = item.email
+                inputSuges.value = item.suges
+
+                idEditando = item.id
+                btnEnviar.innerHTML = 'Atualizar'
+            })
+
             btnExcluir.dataset.id = item.id
+
+
 
             btnExcluir.addEventListener('click', (evento) => {
                 const id = evento.target.dataset.id
@@ -92,11 +109,52 @@ async function mostrarPedidos() {
             lista.appendChild(btnEditar)
             lista.appendChild(btnExcluir)
 
-        });
+        })
+
+        idEditando = null
+
+        btnEnviar.innerHTML = 'Enviar'
+        formulario.reset()
     } catch (e) {
-        console.error('Erro', e)
+        exibirMensagem('Erro de conexão ao backend')
     }
 }
+
+async function atualizarPedido(id) {
+    const nome = inputNome.value.trim()
+    const email = inputEmail.value.trim()
+    const suges = inputSuges.value.trim()
+
+    if(!nome || !email || !suges){
+        exibirMensagem('Preencha todos os campos', 'erro')
+        return
+    }
+
+    try {
+        const resposta = await fetch(`/pedidos/${id}`, {
+            method: 'PUT',
+            headers: {
+                 "Content-Type": "application/json",
+            },
+            body: JSON.stringify({nome, email, suges })
+        })
+        if (resposta.ok){
+            exibirMensagem('Sugestão alterada com sucesso', 'sucesso')
+        }
+
+        if (!resposta.ok){
+            exibirMensagem('Erro ao inserir pedidos', 'erro')
+        }
+
+        const dados = await resposta.json()
+
+        carregarPedidos()
+
+    } catch (e) {
+        console.error('Erro ao alterar sugestão', e)
+    }
+}
+
 
 async function deletarPedido(id) {
     try {
